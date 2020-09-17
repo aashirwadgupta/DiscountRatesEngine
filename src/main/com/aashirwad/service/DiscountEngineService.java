@@ -1,6 +1,11 @@
 package main.com.aashirwad.service;
 
+import main.com.aashirwad.model.PromotionNodeModel;
+import main.com.aashirwad.util.ItemPriceUtil;
+import main.com.aashirwad.util.ItemPromotionsUtil;
+
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Aashirwad Gupta
@@ -16,6 +21,8 @@ public class DiscountEngineService {
      * @return - The total value of the cart.
      */
     public int calculateCartValue(Map<String, Integer> cart){
+        Map<String, Integer> itemPriceData = ItemPriceUtil.itemPricing();
+        Map<String, PromotionNodeModel> promotionData =ItemPromotionsUtil.getPromotionData();
         return 0;
     }
 }
