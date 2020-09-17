@@ -50,7 +50,7 @@ public class DiscountEngineService {
              */
             if(null!=currNode){
                 int amount = 0;
-                if(null==currNode.getJointDiscountNode()){
+                if(null==currNode.getJointDiscountNode() && null==cartFinal.get(item)){
                     if(itemQuantity!=1){
                         amount = (itemQuantity/currNode.getPromotionQuantity())*currNode.getPromotionalPrice()
                                 + (itemQuantity%currNode.getPromotionQuantity())*itemPriceData.get(item);
@@ -61,29 +61,33 @@ public class DiscountEngineService {
                 }
                 else {
                     PromotionNodeModel associatedPromoNode = currNode.getJointDiscountNode();
-                    String associatedItem = associatedPromoNode.getSkuItem();
-                    if(null!=cart.get(associatedItem)){
-                        int associatedItemQuantity = cart.get(associatedItem);
-                        if(itemQuantity>associatedItemQuantity){
-                            amount = (itemQuantity - associatedItemQuantity)*itemPriceData.get(item);
-                            cartFinal.put(item, amount);
-                            amount = associatedItemQuantity*currNode.getPromotionalPrice();
-                            cartFinal.put(associatedItem, amount);
+
+
+                    if(null==cartFinal.get(item) && null!=associatedPromoNode && null==cartFinal.get(associatedPromoNode.getSkuItem())){
+                        String associatedItem = associatedPromoNode.getSkuItem();
+                        if(null!=cart.get(associatedItem)){
+                            int associatedItemQuantity = cart.get(associatedItem);
+                            if(itemQuantity>associatedItemQuantity){
+                                amount = (itemQuantity - associatedItemQuantity)*itemPriceData.get(item);
+                                cartFinal.put(item, amount);
+                                amount = associatedItemQuantity*currNode.getPromotionalPrice();
+                                cartFinal.put(associatedItem, amount);
+                            }
+                            else if(itemQuantity<associatedItemQuantity){
+                                amount = (associatedItemQuantity - itemQuantity)*itemPriceData.get(associatedItem);
+                                cartFinal.put(associatedItem, amount);
+                                amount = itemQuantity*currNode.getPromotionalPrice();
+                                cartFinal.put(item, amount);
+                            }
+                            else {
+                                amount = itemQuantity*currNode.getPromotionalPrice();
+                                cartFinal.put(item, amount);
+                            }
                         }
-                        else if(itemQuantity<associatedItemQuantity){
-                            amount = (associatedItemQuantity - itemQuantity)*itemPriceData.get(associatedItem);
-                            cartFinal.put(associatedItem, amount);
-                            amount = itemQuantity*currNode.getPromotionalPrice();
+                        else{
+                            amount = itemQuantity*itemPriceData.get(item);
                             cartFinal.put(item, amount);
                         }
-                        else {
-                            amount = itemQuantity*currNode.getPromotionalPrice();
-                            cartFinal.put(item, amount);
-                        }
-                    }
-                    else{
-                        amount = itemQuantity*itemPriceData.get(item);
-                        cartFinal.put(item, amount);
                     }
                 }
             }
