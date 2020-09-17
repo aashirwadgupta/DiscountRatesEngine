@@ -51,8 +51,12 @@ public class DiscountEngineService {
             if(null!=currNode){
                 int amount = 0;
                 if(null==currNode.getJointDiscountNode()){
-                    amount = (itemQuantity/currNode.getPromotionQuantity())*currNode.getPromotionalPrice()
-                            + (itemQuantity%currNode.getPromotionQuantity())*itemPriceData.get(item);
+                    if(itemQuantity!=1){
+                        amount = (itemQuantity/currNode.getPromotionQuantity())*currNode.getPromotionalPrice()
+                                + (itemQuantity%currNode.getPromotionQuantity())*itemPriceData.get(item);
+                    } else{
+                        amount = itemQuantity*itemPriceData.get(item);
+                    }
                     cartFinal.put(item, amount);
                 }
                 else {

@@ -42,6 +42,6 @@ public class DiscountEngineServiceTest {
         cart.put("D", 1);
 
         int totalValue = discountEngineService.calculateCartValue(cart);
-        assertEquals(310, totalValue);
+        assertEquals(330, totalValue);
     }
 }
