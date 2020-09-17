@@ -31,7 +31,7 @@ public class DiscountEngineServiceTest {
         cart.put("D", 1);
 
         int totalValue = discountEngineService.calculateCartValue(cart);
-        assertEquals(335, totalValue);
+        assertEquals(355, totalValue);
     }
 
     @Test
