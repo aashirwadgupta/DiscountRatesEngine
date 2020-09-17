@@ -45,4 +45,4 @@ Applying the promotional offer the total value of cart should be **310**
 - Explaination is as below
   - 3 Item1 - 3 for discounted rate @ 130 
   - 5 Item2 - 2 pairs for discounted rate @ 60 each (total 120) and 1 for 45
-  - 1 Item4 - 1 Item4 priced @ 20
+  - 1 Item4 - 1 Item4 priced @ 15
