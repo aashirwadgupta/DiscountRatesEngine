@@ -40,7 +40,7 @@ public class DiscountEngineService {
              * 2. If the associated node is not null, then we will consider this one as a joint promotion.
              *    In case of joint promotion, if the currentPromotionNode's quantity in the care is more than the
              *    associatedNode's quantity in the cart, then we will subtract the associated item's quantity,
-             *    with currentNode quantity, and multiply it with promotionalValue. and the remaining quantity 
+             *    with currentNode quantity, and multiply it with promotionalValue. and the remaining quantity
              *    with the currentNode's original price.
              * 3. If in the above scenario, the associatedNode's item quantity, then the calculation get reversed.
              *    If the quantity, is equal, then any node's promotional value can be multiplied.
@@ -48,7 +48,43 @@ public class DiscountEngineService {
              * Keep adding this in total and we will get final amount of the cart
              *
              */
+            if(null!=currNode){
+                int amount = 0;
+                if(null==currNode.getJointDiscountNode()){
+                    amount = (itemQuantity/currNode.getPromotionQuantity())*currNode.getPromotionalPrice()
+                            + (itemQuantity%currNode.getPromotionQuantity())*itemPriceData.get(item);
+                    cartFinal.put(item, amount);
+                }
+                else {
+                    PromotionNodeModel associatedPromoNode = currNode.getJointDiscountNode();
+                    String associatedItem = associatedPromoNode.getSkuItem();
+                    if(null!=cart.get(associatedItem)){
+                        int associatedItemQuantity = cart.get(associatedItem);
+                        if(itemQuantity>associatedItemQuantity){
+                            amount = (itemQuantity - associatedItemQuantity)*itemPriceData.get(item);
+                            cartFinal.put(item, amount);
+                            amount = associatedItemQuantity*currNode.getPromotionalPrice();
+                            cartFinal.put(associatedItem, amount);
+                        }
+                        else if(itemQuantity<associatedItemQuantity){
+                            amount = (associatedItemQuantity - itemQuantity)*itemPriceData.get(associatedItem);
+                            cartFinal.put(associatedItem, amount);
+                            amount = itemQuantity*currNode.getPromotionalPrice();
+                            cartFinal.put(item, amount);
+                        }
+                        else {
+                            amount = itemQuantity*currNode.getPromotionalPrice();
+                            cartFinal.put(item, amount);
+                        }
+                    }
+                    else{
+                        amount = itemQuantity*itemPriceData.get(item);
+                        cartFinal.put(item, amount);
+                    }
+                }
+            }
         }
-        return 0;
+        System.out.println(cartFinal);
+        return cartFinal.values().stream().mapToInt(Integer::intValue).sum();
     }
 }

@@ -1,9 +1,11 @@
 package test.com.aashirwad.service;
 
+
+
 import main.com.aashirwad.service.DiscountEngineService;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -15,7 +17,7 @@ public class DiscountEngineServiceTest {
 
     private DiscountEngineService discountEngineService;
 
-    @BeforeAll
+    @Before
     public void setUp(){
         discountEngineService = new DiscountEngineService();
     }
